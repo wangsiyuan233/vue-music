@@ -1,3 +1,5 @@
+
+<!-- 因为是高级课程，所有这些都不是他手写的！！ 自己先写好了！！ 妈耶！！！ -->
 <template>
   <div class="m-header">
     <div class="icon"></div>
@@ -9,7 +11,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  export default {}
+export default {}
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
@@ -46,3 +48,5 @@
         font-size: 20px
         color: $color-theme
 </style>
+
+<!-- 因为是高级课程，所有这些都不是他手写的！！ 自己先写好了！！ 妈耶！！！ -->
