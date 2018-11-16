@@ -1,6 +1,7 @@
 import originJsonp from 'jsonp'
 
 export default function jsonp(url, data, option) {
+  // 判断一个 url 里面有没有问号，没有的话就用 &
   url += (url.indexOf('?') < 0 ? '?' : '&') + param(data)
 
   return new Promise((resolve, reject) => {
@@ -21,4 +22,6 @@ export function param(data) {
     url += '&' + k + '=' + encodeURIComponent(value)
   }
   return url ? url.substring(1) : ''
+  // 如果 url 有data，就把第一个 & 去掉
+  // 如果 url 没有data，就为空
 }

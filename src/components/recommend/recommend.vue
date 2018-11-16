@@ -34,6 +34,7 @@
   </div>
 </template>
 
+<!-- 下面的都是手写的 -->
 <script type="text/ecmascript-6">
   import Slider from 'base/slider/slider'
   import Loading from 'base/loading/loading'
@@ -51,7 +52,13 @@
         discList: []
       }
     },
-    created() {
+    created() { // 声明周期
+      // 调用了 _getRecommend()这个方法，_getRecommend()方法又调用了 api/recommend.js
+      // api/recommend.js 里面当然是 JSONP 方法获取数据
+      //  JSONP 通过 url 拼接参数形成地址获取数据
+      //  所以在 localhost8080 我们可以在 Network 里的 JS 看到 fcg (也就是拿到的 data)
+      //  有了 data，就是一些 DOM 和交互上面的事情
+      //  后面会写一个 轮播图组件，把这个组件应用在 推荐页面上
       this._getRecommend()
 
       this._getDiscList()
@@ -76,6 +83,7 @@
         this.setDisc(item)
       },
       _getRecommend() {
+        // res 是 JSOP 里面的 data
         getRecommend().then((res) => {
           if (res.code === ERR_OK) {
             this.recommends = res.data.slider
