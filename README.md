@@ -37,7 +37,8 @@ OK，进度条跑完，我们在总的文件夹下 `npm run dev` 调出 `localho
 `fastclick`： 消除移动端点击的 `300ms` 的延迟
 `babel-polyfill`：对 `ES6` 的 `api` 的转译
 
-【写头部（带炸鸡图标的bar）】
+**【写头部（带炸鸡图标的bar）】**
+
 我们在 `m-header.vue` 里面把骨架和样式都写好
 这个头部很简单的一个框架和样式）重点是右上角的一个 `<router-link> `
 
@@ -133,3 +134,45 @@ export default new Router({
 `JSONP` 通过 `url` 拼接参数形成地址获取数据
 所以在 `localhost8080` 我们可以在 `Network` 里的 `JS` 看到 `fcg` (也就是拿到的 `data`)
 有了 `data`，就是一些 `DOM` 和交互上面的事情
+
+**【轮播图】**
+
+套路：有父组件 div，里面有一个可以滑动的列表
+
+recommand.vue 插入：
+```
+<!-- v-for 遍历 轮播图的数据-->
+    <div v-for="item in recommends">
+      <a :href="item.linkUrl">
+        <img class="needsclick" @load="loadImage" :src="item.picUrl">
+      </a>
+    </div>
+
+    data() {
+      return {
+        recommends: [],
+        discList: []
+      }
+    },
+
+```
+slider.vue 里需要实现的功能：
+```
+    props: {
+      loop: {
+        type: Boolean,
+        default: true
+      },
+      autoPlay: {
+        type: Boolean,
+        default: true
+      },
+      interval: {
+        type: Number,
+        default: 2000
+      }
+    },
+
+```
+非常神奇的是，我的 `better-scroll` 总是在报错
+

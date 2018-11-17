@@ -4,6 +4,7 @@
       <div>
         <div v-if="recommends.length" class="slider-wrapper" ref="sliderWrapper">
           <slider>
+            <!-- v-for 遍历 轮播图的数据-->
             <div v-for="item in recommends">
               <a :href="item.linkUrl">
                 <img class="needsclick" @load="loadImage" :src="item.picUrl">
@@ -101,6 +102,7 @@
         setDisc: 'SET_DISC'
       })
     },
+    // 注册一下：
     components: {
       Slider,
       Loading,

@@ -2,6 +2,7 @@
   <div class="slider" ref="slider">
     <div class="slider-group" ref="sliderGroup">
       <slot>
+        <!-- 插槽，外部组件插入的地方  -->
       </slot>
     </div>
     <div class="dots">
@@ -11,11 +12,14 @@
 </template>
 
 <script type="text/ecmascript-6">
+  // 这个东西一引入，轮播图就是规规整整的了
   import {addClass} from 'common/js/dom'
-  import BScroll from 'better-scroll'
+
+  // import BScroll from 'node_modules/better-scroll'
 
   export default {
     name: 'slider',
+    // props 可以从外部控制这个组件
     props: {
       loop: {
         type: Boolean,
@@ -27,7 +31,7 @@
       },
       interval: {
         type: Number,
-        default: 4000
+        default: 2000
       }
     },
     data() {
@@ -36,7 +40,10 @@
         currentPageIndex: 0
       }
     },
+    // 首先要保证渲染时机等数据时对的
+    // 当 DOM ready 的时候初始化
     mounted() {
+      // 保证 dom 成功渲染我们一般要加个延时
       setTimeout(() => {
         this._setSliderWidth()
         this._initDots()
@@ -45,7 +52,7 @@
         if (this.autoPlay) {
           this._play()
         }
-      }, 20)
+      }, 20)//浏览器刷新间隔是 17 ms
 
       window.addEventListener('resize', () => {
         if (!this.slider) {
