@@ -2,10 +2,12 @@
   <div class="recommend" ref="recommend">
     <scroll ref="scroll" class="recommend-content" :data="discList">
       <div>
+        <!-- 4-4 为了确保 slot 里面的值是有的，我们需要 -->
         <div v-if="recommends.length" class="slider-wrapper" ref="sliderWrapper">
           <slider>
-            <!-- v-for 遍历 轮播图的数据-->
+            <!-- 4-4 v-for 遍历 轮播图的数据-->
             <div v-for="item in recommends">
+              <!-- linkUrl 是在 JSON 里面取到的 -->
               <a :href="item.linkUrl">
                 <img class="needsclick" @load="loadImage" :src="item.picUrl">
               </a>
@@ -47,6 +49,7 @@
 
   export default {
     mixins: [playlistMixin],
+    // 4-4
     data() {
       return {
         recommends: [],
@@ -83,6 +86,8 @@
         })
         this.setDisc(item)
       },
+
+      // 4-4 在上面的 data 里面调用 getRecommend
       _getRecommend() {
         // res 是 JSOP 里面的 data
         getRecommend().then((res) => {

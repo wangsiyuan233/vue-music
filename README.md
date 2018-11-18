@@ -176,3 +176,5 @@ slider.vue 里需要实现的功能：
 ```
 非常神奇的是，我的 `better-scroll` 总是在报错
 
+在 common 目录下新建 common/js/dom.js
+写下了 hasClass 和 addClass 函数

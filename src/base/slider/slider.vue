@@ -5,6 +5,7 @@
         <!-- 插槽，外部组件插入的地方  -->
       </slot>
     </div>
+    <!-- 4-5 滚动到某一页是小圆点会 active -->
     <div class="dots">
       <span class="dot" :class="{active: currentPageIndex === index }" v-for="(item, index) in dots"></span>
     </div>
@@ -19,7 +20,8 @@
 
   export default {
     name: 'slider',
-    // props 可以从外部控制这个组件
+    //
+    // 4-4 props 可以从外部控制这个组件有哪些属性
     props: {
       loop: {
         type: Boolean,
@@ -37,12 +39,14 @@
     data() {
       return {
         dots: [],
+        // 表示当前是第几页，默认当前是第一页
         currentPageIndex: 0
       }
     },
     // 首先要保证渲染时机等数据时对的
     // 当 DOM ready 的时候初始化
     mounted() {
+      // 4-4
       // 保证 dom 成功渲染我们一般要加个延时
       setTimeout(() => {
         this._setSliderWidth()
@@ -54,11 +58,14 @@
         }
       }, 20)//浏览器刷新间隔是 17 ms
 
+
+      // 4-6 监听窗口大小改变的事件
       window.addEventListener('resize', () => {
         if (!this.slider) {
           return
         }
         this._setSliderWidth(true)
+        // 4-6 宽度重新计算完之后要刷新这个 slider
         this.slider.refresh()
       })
     },
@@ -74,6 +81,7 @@
       clearTimeout(this.timer)
     },
     methods: {
+      // 4-4   isResize 是标志位
       _setSliderWidth(isResize) {
         this.children = this.$refs.sliderGroup.children
 
@@ -81,16 +89,20 @@
         let sliderWidth = this.$refs.slider.clientWidth
         for (let i = 0; i < this.children.length; i++) {
           let child = this.children[i]
-          addClass(child, 'slider-item')
+          addClass(child, 'slider-item')// 在 common/js/dom.js
 
           child.style.width = sliderWidth + 'px'
           width += sliderWidth
         }
+
+        // 4-6 如果是 isResize 就不用执行了
         if (this.loop && !isResize) {
           width += 2 * sliderWidth
         }
         this.$refs.sliderGroup.style.width = width + 'px'
       },
+
+      // 4-4
       _initSlider() {
         this.slider = new BScroll(this.$refs.slider, {
           scrollX: true,
@@ -100,8 +112,10 @@
           snapLoop: this.loop,
           snapThreshold: 0.3,
           snapSpeed: 400
+          // click : true
+          // 为什么删除呢？
         })
-
+        // 4-5 将 getCurrentPage 绑定
         this.slider.on('scrollEnd', () => {
           let pageIndex = this.slider.getCurrentPage().pageX
           if (this.loop) {
@@ -114,6 +128,7 @@
           }
         })
 
+        // 4-6 发现只轮播了一遍就停止了，就先清理一下 timer
         this.slider.on('beforeScrollStart', () => {
           if (this.autoPlay) {
             clearTimeout(this.timer)
@@ -123,12 +138,15 @@
       _initDots() {
         this.dots = new Array(this.children.length)
       },
+
+      // 4-5
       _play() {
         let pageIndex = this.currentPageIndex + 1
         if (this.loop) {
           pageIndex += 1
         }
         this.timer = setTimeout(() => {
+          // X方向,Y方向,时间间隔
           this.slider.goToPage(pageIndex, 0, 400)
         }, this.interval)
       }

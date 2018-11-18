@@ -1,8 +1,10 @@
+// 外部可能也会用，所以要 export 出去
 export function hasClass(el, className) {
   let reg = new RegExp('(^|\\s)' + className + '(\\s|$)')
   return reg.test(el.className)
 }
 
+// el 是 dom 对象
 export function addClass(el, className) {
   if (hasClass(el, className)) {
     return
