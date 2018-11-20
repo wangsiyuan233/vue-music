@@ -49,7 +49,7 @@
 
   export default {
     mixins: [playlistMixin],
-    // 4-4
+    // 4-4 添加 data 方法，与 dom 相关  ？？？啥意思
     data() {
       return {
         recommends: [],

@@ -139,42 +139,26 @@ export default new Router({
 
 套路：有父组件 div，里面有一个可以滑动的列表
 
-recommand.vue 插入：
-```
-<!-- v-for 遍历 轮播图的数据-->
-    <div v-for="item in recommends">
-      <a :href="item.linkUrl">
-        <img class="needsclick" @load="loadImage" :src="item.picUrl">
-      </a>
-    </div>
+建立 src/base/slider/slider.vue
 
-    data() {
-      return {
-        recommends: [],
-        discList: []
-      }
-    },
+在 components/recommand/recommand.vue 里
+import silder; components slider (注册一下); 最后写一个 slider 标签 
+哈哈上面不就是写了新 vue 之后的经典三步走吗
 
-```
-slider.vue 里需要实现的功能：
-```
-    props: {
-      loop: {
-        type: Boolean,
-        default: true
-      },
-      autoPlay: {
-        type: Boolean,
-        default: true
-      },
-      interval: {
-        type: Number,
-        default: 2000
-      }
-    },
+写一个 data 方法 {recommand.vue L53}
+写一个 _getRecommend 方法 {recommand.vue}
+将 _getRecommend 方法里的 recommends 赋值给 data 方法
+在 `<slider>` 里用 v-for 遍历轮播图的数据  {recommand.vue L9}
 
-```
-非常神奇的是，我的 `better-scroll` 总是在报错
+回到 slider.vue 
+export default/props 里面写上外部可以控制的属性：
+(循环、自动轮播、间隔啊）
+
+下面我们需要用到 `better-scroll` 来实现 slider,看到这里肯定要 npm install 一下啦
+非常神奇的是，我的 `better-scroll` 总是在报错。。
+
+什么时候初始化 `better-scroll` 比较好呢？
+
 
 在 common 目录下新建 common/js/dom.js
 写下了 hasClass 和 addClass 函数
