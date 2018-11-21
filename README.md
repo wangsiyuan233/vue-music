@@ -105,7 +105,7 @@ export default new Router({
 	]
 })
 ```
-非常神奇的是，我们需要在 src 下面专门建立一个 router 文件夹，而这个文件夹是专门存放组件切换的！目前为止就是这个导航栏的切换。（所以要是我还有别的需求，比如的 [推荐] 下面还有 [hiphop] [摇滚] [民族风]之类的怎么办呢？）
+非常神奇的是，我们需要在 src 下面专门建立一个 `router` 文件夹，而这个文件夹是专门存放组件切换的！目前为止就是这个导航栏的切换。（所以要是我还有别的需求，比如的 [推荐] 下面还有 [hiphop] [摇滚] [民族风]之类的怎么办呢？）
 
 > 三、推荐页面
 
@@ -137,28 +137,85 @@ export default new Router({
 
 **【轮播图】**
 
-套路：有父组件 div，里面有一个可以滑动的列表
+套路：有父组件 `div`，里面有一个可以滑动的列表
 
-建立 src/base/slider/slider.vue
+建立 `src/base/slider/slider.vue`
 
-在 components/recommand/recommand.vue 里
-import silder; components slider (注册一下); 最后写一个 slider 标签 
+在 `components/recommand/recommand.vue` 里
+`import silder`; `components slider` (注册一下); 最后写一个 `slider` 标签 
 哈哈上面不就是写了新 vue 之后的经典三步走吗
 
-写一个 data 方法 {recommand.vue L53}
-写一个 _getRecommend 方法 {recommand.vue}
-将 _getRecommend 方法里的 recommends 赋值给 data 方法
+写一个 `data` 方法 {recommand.vue L53}
+写一个 `_getRecommend` 方法 {recommand.vue}
+将 `_getRecommend` 方法里的 `recommends` 赋值给 `data` 方法
 在 `<slider>` 里用 v-for 遍历轮播图的数据  {recommand.vue L9}
 
-回到 slider.vue 
-export default/props 里面写上外部可以控制的属性：
+回到 `slider.vue` 
+`export default/props` 里面写上外部可以控制的属性：
 (循环、自动轮播、间隔啊）
 
-下面我们需要用到 `better-scroll` 来实现 slider,看到这里肯定要 npm install 一下啦
-非常神奇的是，我的 `better-scroll` 总是在报错。。
-
 什么时候初始化 `better-scroll` 比较好呢？
+没有初始化好（报错或不能滚动）是因为组件没有渲染好，或者高度没有写好
+为了保证渲染时机是正确的，需要在 `slider.vue` 里用到 `mounted` 钩子
+
+下面我们需要用到 `better-scroll` 来实现 `slider`,看到这里肯定要 `npm install` 一下啦
+非常神奇的是，我的 `better-scroll` 总是在报错
+
+为了保证 `dom` 成功渲染，我们一般用 `setTimeout 20ms`（因为浏览器一般刷新间隔是17ms
+这些初始化操作（比如说`_setSliderWidth()`、`_initDots()`、`_initSlider()`）都需要封装在 `methods` 方法里
+简单来说，我们在 method 里详细的写下这些方法，再在 setTimeout 调用就行了 
+
+下面这两个加上引用
+```
+<div class="slider" ref="slider">
+  <div class="slider-group" ref="sliderGroup">
+  </div>
+</div>
+```
+像 `Vue` 这样的 `JavaScript` 框架的主要目的之一就是让开发人员不必去处理 `DOM`。在 `Vue` 中，可以通过在 `$refs` 对象上访问 `ref` 的名称来访问 `DOM` 元素。
+我们也可以通过使用查询选择器来访问 `DOM` 元素来实现这样的效果，但是使用 `ref` 属性更简洁，而且这也是 `Vue` 中的方法。它也将更安全，因为你不会依赖于 `class` 和 `id` 。因此，几乎不会因为更改了 `HTML` 的标签或者 `CSS` 样式受到影响。
+
+*开始写 `_setSliderWidth()`*
+统计 `sliderGroup` 列表里有多少子元素；拿到父容器 `slider` 的宽度；每个元素的宽度都与 `slider` 的宽度相同，所以可以拿到 `sliderGroup` 的宽度；给 `child` 元素自动添加样式，`slider-item` 是下面已经写好的 `css` 样式，我们现在要把这个写好的样式加到 `child` 身上，所以怎么定义 “加” 这个动作很重要，`addClass` 方法在 `common/js/dom.js`。
+
+*开始写 `common/js/dom.js`里面的 `hasClass` 和 `addClass`*
+
+为了确保 `slot` 里面的值在我们调用 `mounted` 时是有的，我们需要在 `recommand.vue` 里加上 `v-if`。
+`<div v-if="recommends.length" class="slider-wrapper" ref="sliderWrapper">`
+只有上面一句执行完了，下面的 `<slider>` 才会执行
+
+在 `slider.vue` 里初始化 `slider`： 当调用了 `BScroll` 时，我们就把下面的配置都传进去。
+
+*下面开始写 dots*（也就是图片上的小圆点）
+
+图片只有五张，但是 div 有七个，是因为loop 为 ture 时，左右会克隆两个 dom ,保证循环切换，也就是说，在初始化 slider 之前，就要初始化好 dom。
+
+把 _initDots() 写在 _initSlider() 之前
+
+在 data 里定义了 dots : 一个长度为 5 的空数组
+在 data 里定义了 currentPageIndex，当前是第 0 页，当 currentPageIndex === index 时，处于 active 状态
+
+ `<span class="dot" :class="{active: currentPageIndex === index }" v-for="(item,index) in dots"></span>`
+注意绑定的 `class` 和 `v-for` 循环的方式
+
+如何把滚动时的样式 和 currentPageIndex 结合起来？
+其实 better-scroll 在滚动的时候，会派发一个事件，所以我们在 _initSlider() 里面绑定一个事件 `scrollEnd` ，当我们滚动完毕的时候, currentPageIndex 一层层加到了最后（？？？）
+
+*开始写自动播放功能*
+在 mounted 里面写一个判断，如果是 `props` 里的 `autoPlay`，就执行`_play()`
+在 method 里面写 `_play()` 方法
+发现还是不能自动轮播
+我们在 methods 里的 _initSlider() 也写上 `autoPlay` 判断
+
+和 mounted 与 methods 平行的还有三个方法！！
+activated()、deactivated()、beforeDestroy()
+这三个方法在 slider.vue 里面都只出现了一次
+
+呵呵以为这样就可以了吗？错错错！
+改变窗口大小的时候，滚动起来长度就出现了 bug！！
+
+*开始自适应窗口*
+监听 window 的 resize 事件
 
 
-在 common 目录下新建 common/js/dom.js
-写下了 hasClass 和 addClass 函数
+21:30 42:08 52:15

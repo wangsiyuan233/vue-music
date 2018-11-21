@@ -1,15 +1,17 @@
-// 外部可能也会用，所以要 export 出去
+// 4-4 外部可能也会用，所以要 export 出去
 export function hasClass(el, className) {
+  //  \\s 是空白字符
   let reg = new RegExp('(^|\\s)' + className + '(\\s|$)')
   return reg.test(el.className)
 }
 
-// el 是 dom 对象
+// 4-4 el 是 dom 对象
 export function addClass(el, className) {
+  // 如果 dom 对象有 className, 就什么也不做
   if (hasClass(el, className)) {
     return
   }
-
+// 没有 className 时
   let newClass = el.className.split(' ')
   newClass.push(className)
   el.className = newClass.join(' ')

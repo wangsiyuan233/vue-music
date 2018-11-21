@@ -2,8 +2,9 @@
   <div class="recommend" ref="recommend">
     <scroll ref="scroll" class="recommend-content" :data="discList">
       <div>
-        <!-- 4-4 为了确保 slot 里面的值是有的，我们需要 -->
+        <!-- 4-4 为了确保 slot 里面的值是有的，我们需要加上 v-if -->
         <div v-if="recommends.length" class="slider-wrapper" ref="sliderWrapper">
+          <!--只有上面一句执行完了,下面的 slider 才会执行  -->
           <slider>
             <!-- 4-4 v-for 遍历 轮播图的数据-->
             <div v-for="item in recommends">
