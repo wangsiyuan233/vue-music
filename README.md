@@ -105,7 +105,7 @@ export default new Router({
 	]
 })
 ```
-非常神奇的是，我们需要在 src 下面专门建立一个 `router` 文件夹，而这个文件夹是专门存放组件切换的！目前为止就是这个导航栏的切换。（所以要是我还有别的需求，比如的 [推荐] 下面还有 [hiphop] [摇滚] [民族风]之类的怎么办呢？）
+非常神奇的是，我们需要在 `src` 下面专门建立一个 `router` 文件夹，而这个文件夹是专门存放组件切换的！目前为止就是这个导航栏的切换。（所以要是我还有别的需求，比如的 [推荐] 下面还有 [hiphop] [摇滚] [民族风]之类的怎么办呢？）
 
 > 三、推荐页面
 
@@ -143,12 +143,12 @@ export default new Router({
 
 在 `components/recommand/recommand.vue` 里
 `import silder`; `components slider` (注册一下); 最后写一个 `slider` 标签 
-哈哈上面不就是写了新 vue 之后的经典三步走吗
+哈哈上面不就是写了新的 `vue` 文件之后的经典三步走吗
 
-写一个 `data` 方法 {recommand.vue L53}
-写一个 `_getRecommend` 方法 {recommand.vue}
+写一个 `data` 方法，在里面定义 `recommends` 为空数组
+写一个 `_getRecommend` 方法
 将 `_getRecommend` 方法里的 `recommends` 赋值给 `data` 方法
-在 `<slider>` 里用 v-for 遍历轮播图的数据  {recommand.vue L9}
+在 `<slider>` 里用 `v-for` 遍历轮播图的数据 `recommends`
 
 回到 `slider.vue` 
 `export default/props` 里面写上外部可以控制的属性：
@@ -157,13 +157,14 @@ export default new Router({
 什么时候初始化 `better-scroll` 比较好呢？
 没有初始化好（报错或不能滚动）是因为组件没有渲染好，或者高度没有写好
 为了保证渲染时机是正确的，需要在 `slider.vue` 里用到 `mounted` 钩子
+`mounted` 钩子里面有一个 `setTimeout` 保证 20ms 会刷新一次浏览器
 
 下面我们需要用到 `better-scroll` 来实现 `slider`,看到这里肯定要 `npm install` 一下啦
 非常神奇的是，我的 `better-scroll` 总是在报错
 
 为了保证 `dom` 成功渲染，我们一般用 `setTimeout 20ms`（因为浏览器一般刷新间隔是17ms
 这些初始化操作（比如说`_setSliderWidth()`、`_initDots()`、`_initSlider()`）都需要封装在 `methods` 方法里
-简单来说，我们在 method 里详细的写下这些方法，再在 setTimeout 调用就行了 
+简单来说，我们在 `method` 里详细的写下这些方法，再在 `setTimeout` 调用就行了 
 
 下面这两个加上引用
 ```
@@ -188,34 +189,55 @@ export default new Router({
 
 *下面开始写 dots*（也就是图片上的小圆点）
 
-图片只有五张，但是 div 有七个，是因为loop 为 ture 时，左右会克隆两个 dom ,保证循环切换，也就是说，在初始化 slider 之前，就要初始化好 dom。
+图片只有五张，但是 `div` 有七个，是因为 `loop` 为 `ture` 时，左右会克隆两个 `dom` ,保证循环切换，也就是说，在初始化 `slider` 之前，就要初始化好 `dom`。
 
-把 _initDots() 写在 _initSlider() 之前
+把 `_initDots()` 写在 `_initSlider()` 之前
 
-在 data 里定义了 dots : 一个长度为 5 的空数组
-在 data 里定义了 currentPageIndex，当前是第 0 页，当 currentPageIndex === index 时，处于 active 状态
+在 `data` 里定义了 `dots` : 一个长度为 5 的空数组
+在 `data` 里定义了 `currentPageIndex`，当前是第 0 页，当 `currentPageIndex === index` 时，处于 `active` 状态
 
  `<span class="dot" :class="{active: currentPageIndex === index }" v-for="(item,index) in dots"></span>`
 注意绑定的 `class` 和 `v-for` 循环的方式
 
-如何把滚动时的样式 和 currentPageIndex 结合起来？
-其实 better-scroll 在滚动的时候，会派发一个事件，所以我们在 _initSlider() 里面绑定一个事件 `scrollEnd` ，当我们滚动完毕的时候, currentPageIndex 一层层加到了最后（？？？）
+如何把滚动时的样式 和 `currentPageIndex` 结合起来？
+其实 `better-scroll` 在滚动的时候，会派发一个事件，所以我们在 `_initSlider()` 里面绑定一个事件 `scrollEnd` ，当我们滚动完毕的时候, `currentPageIndex` 就为列表第一个（？？？
 
 *开始写自动播放功能*
-在 mounted 里面写一个判断，如果是 `props` 里的 `autoPlay`，就执行`_play()`
-在 method 里面写 `_play()` 方法
+在 `mounted` 里面写一个判断，如果是 `props` 里的 `autoPlay`，就执行`_play()`
+在 `methods` 里面写 `_play()` 方法
 发现还是不能自动轮播
-我们在 methods 里的 _initSlider() 也写上 `autoPlay` 判断
+我们在 `methods` 里的` _initSlider()` 也写上 `autoPlay` 判断
+万事OK
 
-和 mounted 与 methods 平行的还有三个方法！！
-activated()、deactivated()、beforeDestroy()
-这三个方法在 slider.vue 里面都只出现了一次
+和 `mounted` 与 `methods` 平行的还有三个方法！！
+`activated()`、`deactivated()`、`beforeDestroy()`
+这三个方法在 `slider.vue` 里面都只出现了一次
 
 呵呵以为这样就可以了吗？错错错！
 改变窗口大小的时候，滚动起来长度就出现了 bug！！
 
 *开始自适应窗口*
-监听 window 的 resize 事件
+监听 `window` 的 `resize` 事件
+在 `_setSliderWidth()` 里面添加标识符 `isResize`
+如果有 `isResize`： `width += sliderWidth`
+如果没有 `isResize`： `width += 2 * sliderWidth`
 
+最后 宽度重新计算完之后要刷新 `slider` ：`this.slider.refresh()`
 
-21:30 42:08 52:15
+*开始优化*
+1、如果在导航栏之间切换，回到轮播图的时候，会发现，又回到了第一张图片，其实这是没有必要的，因为整个 `dom` 重新渲染了啊。
+解决方法：在 `App.vue` 里添加 `<keep-alive>`，缓存就会添加到内存中
+```
+<keep-alive>
+    <router-view> </router-view>
+</keep-alive>
+```
+2、销毁计时器
+ `clearTimeout(this.timer)`
+
+**【开发歌单组件】**
+肯定也是去 QQ 音乐里抓的啊
+
+在 api/recommend.js 里 export function getDiscList()
+在 recommend.vue 的 methods 里添加 _getDiscList() 方法
+在 recommend.vue 的 created() 里调用 _getDiscList()

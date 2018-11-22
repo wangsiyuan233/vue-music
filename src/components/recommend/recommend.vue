@@ -97,6 +97,8 @@
           }
         })
       },
+
+      // 4-7 获取歌单
       _getDiscList() {
         getDiscList().then((res) => {
           if (res.code === ERR_OK) {

@@ -2,6 +2,7 @@ import jsonp from 'common/js/jsonp'
 import {commonParams, options} from './config'
 import axios from 'axios'
 
+// 4-2 抓轮播图数据
 export function getRecommend() {
   const url = 'https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg'
 
@@ -14,6 +15,8 @@ export function getRecommend() {
   return jsonp(url, data, options)
 }
 
+
+// 4-7 抓歌单数据
 export function getDiscList() {
   const url = '/api/getDiscList'
 

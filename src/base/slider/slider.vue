@@ -17,8 +17,9 @@
 <script type="text/ecmascript-6">
   // 这个东西一引入，轮播图就是规规整整的了
   import {addClass} from 'common/js/dom'
-
   // import BScroll from 'node_modules/better-scroll'
+  var BScroll = require('better-scroll')
+  // 用 ES5 的语法就治愈了这个奇怪的插件
 
   export default {
     name: 'slider',
@@ -44,6 +45,7 @@
       return {
         // dots 是个对象，默认是一个空数组
         dots: [],
+
         // 表示当前是第几页，默认当前是第一页
         currentPageIndex: 0
       }
@@ -54,6 +56,7 @@
       // 4-4
       // 保证 dom 成功渲染我们一般要加个延时
       setTimeout(() => {
+        // 4-6 一开始这里面是 undefined, 会对 定义的 返回 true
         this._setSliderWidth()
         // 图片只有五张，但是 div 有七个，是因为loop 为 ture 时，左右会克隆两个 dom ,保证循环切换
         // 也就是说，在初始化 slider 之前，就要初始化好 dom
@@ -75,7 +78,7 @@
           return
         }
         this._setSliderWidth(true)
-        // 4-6 宽度重新计算完之后要刷新这个 slider
+        // 4-6 重新计算 better-scroll，当 DOM 结构发生变化的时候务必要调用确保滚动的效果正常。
         this.slider.refresh()
       })
     },
@@ -85,18 +88,25 @@
         this._play()
       }
     },
+
+    // 4-6 在组件里有计时器的时候，关闭这个组件的时候就打碎计时器
     deactivated() {
       clearTimeout(this.timer)
     },
     beforeDestroy() {
       clearTimeout(this.timer)
     },
+
+
     methods: {
-      // 4-4   isResize 是标志位
+      // 4-4   isResize 是标志位，表示这个宽度是 resize 过来的，
+      // 总的来说:
+      // 如果有 isResize： width += sliderWidth
+      // 如果没有 isResize： width += 2 * sliderWidth
       _setSliderWidth(isResize) {
         // 统计列表里有多少元素
         this.children = this.$refs.sliderGroup.children
-        // width 是啥？
+        // width 是父容器的宽度
         let width = 0
         // 拿到父容器 slider 的宽度
         let sliderWidth = this.$refs.slider.clientWidth
@@ -116,12 +126,13 @@
           width += sliderWidth
         }
 
-        // 4-6 如果是 isResize 就不用执行了
+        // 4-6 如果没有 isResize 就执行下面的宽度
         // 4-4 上面的 loop 为 ture 时，左右会克隆两个 dom ,保证循环切换
         if (this.loop && !isResize) {
-          // 所有在是宽度为
+          // 所有在是宽度为 2倍的
           width += 2 * sliderWidth
         }
+
         this.$refs.sliderGroup.style.width = width + 'px'
       },
 
@@ -138,9 +149,13 @@
           snapSpeed: 400
           // click : true
           // 不允许点击
+          // click : true时，手机情况下点击轮播图片不能跳转
+          // 是因为 fastclick 和 better-scroll 冲突了
+          // 删除以后，a 链接跳转是默认行为，不需要监听 click 了
         })
 
-        // 4-5 将 currentPageIndex 绑定
+        // 4-5 将 currentPageIndex 绑定 !!!!
+        // 滚动结束时会发生：
         this.slider.on('scrollEnd', () => {
           let pageIndex = this.slider.getCurrentPage().pageX
           // 在循环模式下，我们默认第一个元素是一个拷贝，所以要减一啊！
@@ -152,7 +167,7 @@
           }
           this.currentPageIndex = pageIndex
 
-          // 这里是第二次出现 autoPlay 的判断，第一次是在mounted
+          // 这里是第二次出现 autoPlay 的判断，第一次是在 mounted
           if (this.autoPlay) {
             this._play()
           }
