@@ -1,7 +1,7 @@
 
 > 一、准备工作
 
-*第2个视频：Vue-cli脚手架安装*
+*Vue-cli脚手架安装*
 准备 `webpack` / `node.js`
 下面说说 准备 `vue-cli` 的安装
 进入 `cmd` 在全局环境下 `npm install --global vue-cli`
@@ -11,7 +11,7 @@
 安装`vue-cli`并不是唯一的方式，但是它可以帮助我们，搭建好基本的框架，帮助我们初始化了 `webpack`
 OK，进度条跑完，我们在总的文件夹下 `npm run dev` 调出 `localhost8080`
 
-*第3个视频：项目目录介绍及图标字体丶公共样式等资源准备*
+*项目目录介绍及图标字体丶公共样式等资源准备*
 `src/api`：放的是和后端请求相关的代码，比如 `Ajax` 和 `JSONP`
 `src/common`：目录里面就是一些通用性的资源 字体啊图片啊样式啊
 `src/components`：通用组件
@@ -37,6 +37,8 @@ OK，进度条跑完，我们在总的文件夹下 `npm run dev` 调出 `localho
 `fastclick`： 消除移动端点击的 `300ms` 的延迟
 `babel-polyfill`：对 `ES6` 的 `api` 的转译
 
+-----------
+
 **【写头部（带炸鸡图标的bar）】**
 
 我们在 `m-header.vue` 里面把骨架和样式都写好
@@ -60,6 +62,8 @@ OK，进度条跑完，我们在总的文件夹下 `npm run dev` 调出 `localho
 （呵呵呵哒失败了，不能手贱倒入）
 
 下面开始顶部导航栏组件开发（就是动态组件切换啊！）所以重头戏就是 `router/index.js` 的配置
+
+-----------
 
 **【引入顶部导航栏】**
 
@@ -85,6 +89,9 @@ export default {
 }
 </script>
 ```
+
+-----------
+
 
 **【实现动态组件切换】**
 
@@ -115,6 +122,8 @@ export default new Router({
 
 数据来自 QQ音乐，现在要开始学怎么抓数据了！！幸福来得太突然！！
 
+-----------
+
 **【抓数据】**
 
 我们要通过 `JSONP` 来拿到我们想要的数据
@@ -134,6 +143,8 @@ export default new Router({
 `JSONP` 通过 `url` 拼接参数形成地址获取数据
 所以在 `localhost8080` 我们可以在 `Network` 里的 `JS` 看到 `fcg` (也就是拿到的 `data`)
 有了 `data`，就是一些 `DOM` 和交互上面的事情
+
+-----------
 
 **【轮播图】**
 
@@ -235,9 +246,40 @@ export default new Router({
 2、销毁计时器
  `clearTimeout(this.timer)`
 
-**【开发歌单组件】**
+-----------
+
+**【歌单数据接口分析】**
 肯定也是去 QQ 音乐里抓的啊
 
-在 api/recommend.js 里 export function getDiscList()
-在 recommend.vue 的 methods 里添加 _getDiscList() 方法
-在 recommend.vue 的 created() 里调用 _getDiscList()
+网址是：`https://y.qq.com/portal/playlist.html`
+控制台打开 `network`，看到歌单数据的 `jsonp`
+
+惊喜不已对不对！就像获取 轮播图数据一样，我们现在也要抓歌单数据啦！
+
+在 `api/recommend.js` 里 `export function getDiscList()`
+  里面写的 `url` 是 `https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg`
+   `data` 里写的是 `Query String Parameters` 里的数据
+在 `recommend.vue` 的 `methods` 里添加 `_getDiscList()` 方法
+在 `recommend.vue` 的 `created()` 里调用 `_getDiscList()`
+
+然后发现 `recommend.js` 里的 `url` 不能按照原来的套路写了！！！
+写上面的 `url` 被服务端（500）了啊，`host` 和 `referer` 给了我们限制，前端又不能修改 `request header`，只能通过 后端代理 的方式解决这个问题
+
+安装 `axios` 库
+在 `build/dev-server.js` 里定义一个路由，它的作用是通过一个真实的 qq 服务器地址，通过 `axios` 发送一个 `http` 请求
+在这个请求里修改 `headers`（伪装成 qq 音乐里的 `host` 和 `referer`）,同时把浏览器端发来的请求参数（`recommend.js`里的 `const data` 里的数据）
+原封不动的传给 qq 的服务端，qq 服务端收到请求后会给我们正确的响应
+
+`app.use('/api', apiRoutes)`之后
+
+我们离开后台（`build/dev-server.js`），前往前端（`api/recommand.js`）
+修改 `url`:  `const url = '/api/getDiscList'`
+改了以后，我们就不是 `jsonp` 了，需要 `import` 和 `return`（所以现在是什么）
+
+**【开发歌单组件】**
+在 recommend.vue 的 data 里定义一下 discList
+在 _getDiscList() 里面给 discList 赋值
+完了就去写 <ul>
+
+*下面开始局部滚动*
+better-scroll 是父子层级，子集里的第一个元素才会滚动

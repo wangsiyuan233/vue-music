@@ -23,6 +23,7 @@
                 <img width="60" height="60" v-lazy="item.imgurl">
               </div>
               <div class="text">
+                <!-- v-html 给字符做转译 -->
                 <h2 class="name" v-html="item.creator.name"></h2>
                 <p class="desc" v-html="item.dissname"></p>
               </div>
@@ -54,6 +55,7 @@
     data() {
       return {
         recommends: [],
+        // 4-9
         discList: []
       }
     },
@@ -98,10 +100,11 @@
         })
       },
 
-      // 4-7 获取歌单
+      // 4-7 获取歌单 和上面一样的！！！
       _getDiscList() {
         getDiscList().then((res) => {
           if (res.code === ERR_OK) {
+            // 4-9 这里给 discList 赋值，和上面的 recommends 是一样的
             this.discList = res.data.list
           }
         })
@@ -144,7 +147,7 @@
         .item
           display: flex
           box-sizing: border-box
-          align-items: center
+          align-items: center  // 右侧垂直居中
           padding: 0 20px 20px 20px
           .icon
             flex: 0 0 60px

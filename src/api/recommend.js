@@ -18,20 +18,24 @@ export function getRecommend() {
 
 // 4-7 抓歌单数据
 export function getDiscList() {
+  // 这里的 url 和上面的不一样
+  // 在前端这里就不是 JSONP 请求了，而是一个 ajax 请求
+  // 请求的是 dev-serve.js 里的 apiRoutes.get('/getDiscList',function(){})
   const url = '/api/getDiscList'
 
   const data = Object.assign({}, commonParams, {
-    platform: 'yqq',
+    platform: 'yqq', // ??? 在哪里
     hostUin: 0,
     sin: 0,
     ein: 29,
     sortId: 5,
     needNewCode: 0,
     categoryId: 10000000,
-    rnd: Math.random(),
+    rnd: Math.random(),// Query String Parameters 里也是随机数
     format: 'json'
   })
 
+// 4-8
   return axios.get(url, {
     params: data
   }).then((res) => {
