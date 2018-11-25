@@ -279,7 +279,23 @@ export default new Router({
 **【开发歌单组件】**
 在 recommend.vue 的 data 里定义一下 discList
 在 _getDiscList() 里面给 discList 赋值
-完了就去写 <ul>
+完了就去写 `<ul>`
 
-*下面开始局部滚动*
-better-scroll 是父子层级，子集里的第一个元素才会滚动
+*突发事件：迁移 dev-server.js*
+这个时候！！！我发现一个大大大bug！！
+对！为什么又是bug
+这个bug是
+最新版本的 vue-cli 已经放弃 dev-server.js 而改在 webpack.dev.conf.js 了
+所以要做一下迁移
+迁移前：
+![](https://i.imgur.com/rnypsj2.png)
+迁移后：
+![](https://i.imgur.com/gUIlTRx.png)
+
+哈哈哈终于!!!出现了歌单列表！！老天待我不薄啊！！
+
+*抽象一个 scroll 组件，实现下半部分的滚动*
+竟然可以不用better-scroll，我们只有抽象一个 scroll 组件就行了
+创建 src/base/scroll.vue
+然后开始在里面写写写
+你就会发现 scroll.vue 里的所有内容都是为了实现 scroll 而存在的，它们只干了这一件事

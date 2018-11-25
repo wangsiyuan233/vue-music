@@ -1,18 +1,26 @@
+<!-- 4-10  -->
 <template>
   <div ref="wrapper">
+    <!--slot里面可以套任何的 dom  -->
     <slot></slot>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import BScroll from 'better-scroll'
+  // import BScroll from 'better-scroll'
+  //
+  // 在这里引用 better-scroll
+  // 就相当于抽象化它，达到了直接引用的目的
+  var BScroll = require('better-scroll')
 
   export default {
     props: {
+      // 下面的这些属性的具体作用要去 better-scroll 里面看
       probeType: {
         type: Number,
         default: 1
       },
+      // 手动派发点击事件
       click: {
         type: Boolean,
         default: true
@@ -39,15 +47,19 @@
       }
     },
     mounted() {
+      // 在 mounted 里用 setTimeout 保证 dom 渲染了
       setTimeout(() => {
         this._initScroll()
       }, 20)
     },
     methods: {
+      // 4-10 scroll 初始化
       _initScroll() {
+        // 没有 wrapper
         if (!this.$refs.wrapper) {
           return
         }
+        // 如果有 wrapper
         this.scroll = new BScroll(this.$refs.wrapper, {
           probeType: this.probeType,
           click: this.click
@@ -74,12 +86,16 @@
           })
         }
       },
+      // 4-10 scroll 的方法代理
       disable() {
         this.scroll && this.scroll.disable()
       },
+
+      // 4-10 scroll 的方法代理
       enable() {
         this.scroll && this.scroll.enable()
       },
+      // 4-10 scroll 的方法代理 重新计算高度
       refresh() {
         this.scroll && this.scroll.refresh()
       },
@@ -90,7 +106,12 @@
         this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
       }
     },
+
+    // 4-10 watch data 的变化
     watch: {
+      // 如果 data 变化了就 refresh
+      // 如果 refresh 在调用方触发的话，那就在每个调用方都要关心数据变化+手动调用sroll.refresh()
+      // 这就算是命令式的语法了，很不友好，我们肯定希望组件内部自己刷新啊！
       data() {
         setTimeout(() => {
           this.refresh()

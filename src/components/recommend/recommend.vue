@@ -1,5 +1,6 @@
 <template>
   <div class="recommend" ref="recommend">
+    <!-- 4-10 这里绑定的 data 特别重要 歌单渲染了 scroll 就会监听到歌单的变化 就会调用refresh 方法-->
     <scroll ref="scroll" class="recommend-content" :data="discList">
       <div>
         <!-- 4-4 为了确保 slot 里面的值是有的，我们需要加上 v-if -->
