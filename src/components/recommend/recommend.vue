@@ -1,6 +1,7 @@
 <template>
   <div class="recommend" ref="recommend">
     <!-- 4-10 这里绑定的 data 特别重要 歌单渲染了 scroll 就会监听到歌单的变化 就会调用refresh 方法-->
+    <!-- 4-11  ref="scroll"-->
     <scroll ref="scroll" class="recommend-content" :data="discList">
       <div>
         <!-- 4-4 为了确保 slot 里面的值是有的，我们需要加上 v-if -->
@@ -11,6 +12,7 @@
             <div v-for="item in recommends">
               <!-- linkUrl 是在 JSON 里面取到的 -->
               <a :href="item.linkUrl">
+                <!--4-11 一旦有一个图片触发 load ，我们就调用loadImage方法-->
                 <img class="needsclick" @load="loadImage" :src="item.picUrl">
               </a>
             </div>
@@ -55,8 +57,9 @@
     // 4-4 添加 data 方法，与 dom 相关  ？？？啥意思
     data() {
       return {
+        // 上面的 silder 数据
         recommends: [],
-        // 4-9
+        // 4-11 异步获取得到的下面列表数据
         discList: []
       }
     },
@@ -78,7 +81,10 @@
         this.$refs.recommend.style.bottom = bottom
         this.$refs.scroll.refresh()
       },
+      // 4-11 这个方法很重要，关系到上下两个部分出现的时机
       loadImage() {
+        // 为了不浪费，设置 checkloaded 标志位，只要一张图片被调用了就 refresh
+        // 此时哪怕下面的歌单列表是先渲染出来的，我们也可以得到完整的高度，不会出现滚不到底部的情况
         if (!this.checkloaded) {
           this.checkloaded = true
           this.$refs.scroll.refresh()

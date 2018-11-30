@@ -9,13 +9,16 @@
 <script type="text/ecmascript-6">
   // import BScroll from 'better-scroll'
   //
-  // 在这里引用 better-scroll
+  // 在这里引用 better-scroll，就不用在每一个组件里面初始化它了，引用一下就行了
   // 就相当于抽象化它，达到了直接引用的目的
   var BScroll = require('better-scroll')
 
   export default {
+    // 下面的这些属性的具体作用要去 better-scroll 官网里面看
     props: {
-      // 下面的这些属性的具体作用要去 better-scroll 里面看
+      //1 滚动的时候会派发scroll事件，会截流。
+      //2 滚动的时候实时派发scroll事件，不会截流。
+      //3 除了实时派发scroll事件，在swipe的情况下仍然能实时派发scroll事件
       probeType: {
         type: Number,
         default: 1
@@ -25,10 +28,12 @@
         type: Boolean,
         default: true
       },
+      // 是否派发滚动事件
       listenScroll: {
         type: Boolean,
         default: false
       },
+      // 动态变化的列表数据，要不然忘记refresh，数据图就会滚不动
       data: {
         type: Array,
         default: null
@@ -37,17 +42,19 @@
         type: Boolean,
         default: false
       },
+      // 是否派发列表滚动开始的事件
       beforeScroll: {
         type: Boolean,
         default: false
       },
+      // 当数据更新后，刷新scroll的延时。
       refreshDelay: {
         type: Number,
         default: 20
       }
     },
     mounted() {
-      // 在 mounted 里用 setTimeout 保证 dom 渲染了
+      // 在 mounted 里用 setTimeout 定时保证 dom 渲染了
       setTimeout(() => {
         this._initScroll()
       }, 20)
@@ -59,7 +66,7 @@
         if (!this.$refs.wrapper) {
           return
         }
-        // 如果有 wrapper
+        // 如果有 wrapper, 就初始化
         this.scroll = new BScroll(this.$refs.wrapper, {
           probeType: this.probeType,
           click: this.click
