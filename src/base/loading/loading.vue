@@ -1,6 +1,9 @@
+
+<!-- 4-13 小菊花  -->
 <template>
   <div class="loading">
     <img width="24" height="24" src="./loading.gif">
+    <!-- 上面是 GIF  下面是文案 -->
     <p class="desc">{{title}}</p>
   </div>
 </template>
@@ -9,6 +12,7 @@
     props: {
       title: {
         type: String,
+        // 默认载入
         default: '正在载入...'
       }
     }

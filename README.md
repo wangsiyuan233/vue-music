@@ -322,9 +322,32 @@ export default new Router({
 
 当 `better-scroll` 调用 `refresh` 的时候就会拿到上面横着的高度
 
-`better-scroll`根据 refresh 时 父元素和子元素之差做一个计算，所以实例化的时候一定要保证 dom 是渲染好的，如果有数据变化的场景一定要重新 refresh 一下！！！自己监听到了就自己变化一下
+`better-scroll`根据 `refresh` 时 父元素和子元素之差做一个计算，所以实例化的时候一定要保证 `dom` 是渲染好的，如果有数据变化的场景一定要重新 `refresh` 一下！！！自己监听到了就自己变化一下
 
-【懒加载】
+【懒加载 4-11】
 第一次刷新的时候只有首屏的图片，滚动的时候才出现新的图片
-呵呵呵呵呵 第三方的插件 vuelazyload 
-在 main.js 安装 引入 use一下
+呵呵呵呵呵 安装第三方的插件 `vue-lazyload` 
+在 `main.js` 安装 引入 `use`
+
+懒加载 把 `:src` 换成 `v-lazy`
+`<img width="60" height="60" v-lazy="item.imgurl">`
+
+在 `recommand.vue`
+一旦有一个图片触发 `load` ，我们就调用 `loadImage` 方法：
+`<img class="needsclick" @load="loadImage" :src="item.picUrl">`
+
+
+此时点上面的 `slider` 点不动了。。。
+`fastclick` 和 `better-scroll` 又又又又冲突了
+
+在 `recommand.vue` 添加 `class="needsclick"`
+ `<img class="needsclick" @load="loadImage" :src="item.picUrl">`
+`fastclick` 发现 `img` 的 `dom` 上有 `needsclick`，就知道你需要点击事件，就不会去拦截你的点击事件，这样就不会阻止点击了
+
+【小菊花 4-12】
+哈哈哈我刚刚还在迷思，难道小菊花要用 `CSS` 动画画出来吗？？？
+`base/loading/loading.vue` 里面有 `loading.gif`，引用一下就行了
+
+接着要让小菊花转起来啊，还是回到`recommand.vue`个它一个容器
+ `<div class="loading-container" v-show="!discList.length"> <loading></loading> </div>`
+如果下面的列表还没有加载出来长度，就显示小菊花.gif

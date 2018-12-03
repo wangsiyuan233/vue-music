@@ -23,6 +23,7 @@
           <ul>
             <li @click="selectItem(item)" v-for="item in discList" class="item">
               <div class="icon">
+                <!-- 4-12 懒加载 把 :src 换成 v-lazy -->
                 <img width="60" height="60" v-lazy="item.imgurl">
               </div>
               <div class="text">
@@ -34,6 +35,7 @@
           </ul>
         </div>
       </div>
+      <!-- 4-13 小菊花  没有长度的时候就显示 loading  啊-->
       <div class="loading-container" v-show="!discList.length">
         <loading></loading>
       </div>
