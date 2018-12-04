@@ -351,3 +351,7 @@ export default new Router({
 接着要让小菊花转起来啊，还是回到`recommand.vue`个它一个容器
  `<div class="loading-container" v-show="!discList.length"> <loading></loading> </div>`
 如果下面的列表还没有加载出来长度，就显示小菊花.gif
+
+> 五、歌手列表
+
+构造也非常简单，左边是歌手，右边是字母
