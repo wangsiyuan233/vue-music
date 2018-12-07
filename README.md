@@ -277,14 +277,14 @@ export default new Router({
 改了以后，我们就不是 `jsonp` 了，需要 `import` 和 `return`（所以现在是什么）
 
 **【开发歌单组件】**
-在 recommend.vue 的 data 里定义一下 discList
-在 _getDiscList() 里面给 discList 赋值
+在 `recommend.vue` 的 `data` 里定义一下 `discList`
+在 `_getDiscList()` 里面给 `discList` 赋值
 完了就去写 `<ul>`
 
 *突发事件：迁移 dev-server.js*
 这个时候！！！我发现一个大大大bug！！
 
-最新版本的 vue-cli 已经放弃 dev-server.js 而改在 webpack.dev.conf.js 了
+最新版本的 `vue-cli` 已经放弃 `dev-server.js` 而改在 `webpack.dev.conf.js` 了
 所以要做一下迁移
 迁移前：
 ![](https://i.imgur.com/rnypsj2.png)
@@ -293,8 +293,8 @@ export default new Router({
 
 哈哈哈终于!!!出现了歌单列表！！老天待我不薄啊！！
 
-复杂方法：用 better-scroll 实现滚动
-因为 better-scroll 是父子层级，子级的第一个元素才会滚动，所以需要添加 `<div>`把榜单列表包进去，再在父级元素上引用一下，就可以滚动起来了
+复杂方法：用 `better-scroll` 实现滚动
+因为 `better-scroll` 是父子层级，子级的第一个元素才会滚动，所以需要添加 `<div>`把榜单列表包进去，再在父级元素上引用一下，就可以滚动起来了
 实际上不可能所有的滚动列表都行这种命令式代码
 
 *抽象一个 scroll 组件，实现下半部分的滚动*
@@ -354,4 +354,8 @@ export default new Router({
 
 > 五、歌手列表
 
-构造也非常简单，左边是歌手，右边是字母
+构造也非常简单，左边是歌手，右边是字母，（联系人列表布局非常重要，难点难点啊）
+
+【歌手数据抓取】
+创建 `src/api/singer.js` 和 `base/components/singer/singer.vue`
+通过上面两个文件抓取的数据并不符合我们所需要的数据结构

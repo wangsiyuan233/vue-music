@@ -1,3 +1,5 @@
+
+// 5-2
 import jsonp from 'common/js/jsonp'
 import {commonParams, options} from './config'
 
@@ -34,4 +36,3 @@ export function getSingerDetail(singerId) {
 
   return jsonp(url, data, options)
 }
-
