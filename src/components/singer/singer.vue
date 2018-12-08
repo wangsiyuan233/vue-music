@@ -9,6 +9,7 @@
   import ListView from 'base/listview/listview'
   import {getSingerList} from 'api/singer'
   import {ERR_OK} from 'api/config'
+  // 5-4 引入了 js
   import Singer from 'common/js/singer'
   import {mapMutations} from 'vuex'
   import {playlistMixin} from 'common/js/mixin'
@@ -45,6 +46,8 @@
           }
         })
       },
+
+      // 5-3 遍历列表
       _normalizeSinger(list) {
         let map = {
           hot: {
@@ -71,20 +74,24 @@
             id: item.Fsinger_mid
           }))
         })
-        // 为了得到有序列表，我们需要处理 map
-        let ret = []
-        let hot = []
+        // 5-3 为了得到有序列表，我们需要处理 map
+        let ret = [] // 剩下的
+        let hot = [] // 热门的
         for (let key in map) {
           let val = map[key]
           if (val.title.match(/[a-zA-Z]/)) {
+            // 异位数组里面有 items ，形成 与位数组
             ret.push(val)
           } else if (val.title === HOT_NAME) {
             hot.push(val)
           }
         }
+        // 对 ret 数据做排序
         ret.sort((a, b) => {
+          // 升序
           return a.title.charCodeAt(0) - b.title.charCodeAt(0)
         })
+        // 得到异位数组
         return hot.concat(ret)
       },
       ...mapMutations({

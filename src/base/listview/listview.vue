@@ -1,4 +1,7 @@
+
+<!-- 5-4  -->
 <template>
+  <!--data 发生变化时，重新计算 scroll   -->
   <scroll @scroll="scroll"
           :listen-scroll="listenScroll"
           :probe-type="probeType"
@@ -34,6 +37,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+// 5-4
   import Scroll from 'base/scroll/scroll'
   import Loading from 'base/loading/loading'
   import {getData} from 'common/js/dom'
@@ -41,6 +45,7 @@
   const TITLE_HEIGHT = 30
   const ANCHOR_HEIGHT = 18
 
+// 接收数据
   export default {
     props: {
       data: {
@@ -48,6 +53,7 @@
         default: []
       }
     },
+    // 注册一下
     computed: {
       shortcutList() {
         return this.data.map((group) => {

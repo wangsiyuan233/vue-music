@@ -356,6 +356,8 @@ export default new Router({
 
 构造也非常简单，左边是歌手，右边是字母，（联系人列表布局非常重要，难点难点啊）
 
-【歌手数据抓取】
+【抓取歌手数据】
 创建 `src/api/singer.js` 和 `base/components/singer/singer.vue`
 通过上面两个文件抓取的数据并不符合我们所需要的数据结构
+
+5-3 写了 js/singer.js 抓取了歌手的数据，但还是没有按照顺序生成
