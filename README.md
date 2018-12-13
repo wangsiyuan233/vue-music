@@ -360,4 +360,11 @@ export default new Router({
 创建 `src/api/singer.js` 和 `base/components/singer/singer.vue`
 通过上面两个文件抓取的数据并不符合我们所需要的数据结构
 
-5-3 写了 js/singer.js 抓取了歌手的数据，但还是没有按照顺序生成
+5-3 写了 js/singer.js 抓取了歌手的数据，但还是没有按照顺序生成列表
+
+5-4 创建 base/listview/listview.vue 
+歌手列表的左半部分(列表组件)就完成了
+
+5-5 实现右侧的快速入口
+一开始就用 shortcutlist 拿到 title 的集合数组
+用 shortcutList 方法拿到数据以后就开始写 dom ，`div class="list-shortcut"`

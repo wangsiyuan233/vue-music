@@ -106,9 +106,11 @@
       refresh() {
         this.scroll && this.scroll.refresh()
       },
+      // 5-5
       scrollTo() {
         this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
       },
+      // 5-5
       scrollToElement() {
         this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
       }

@@ -1,11 +1,13 @@
 <template>
   <div class="singer" ref="singer">
+    <!-- 5-4 引入/注册/写结构 -->
     <list-view @select="selectSinger" :data="singers" ref="list"></list-view>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
+  // 5-4 这里引入了，就要在下面的 components 注册一下
   import ListView from 'base/listview/listview'
   import {getSingerList} from 'api/singer'
   import {ERR_OK} from 'api/config'
@@ -39,6 +41,7 @@
         })
         this.setSinger(singer)
       },
+      // 5-4
       _getSingerList() {
         getSingerList().then((res) => {
           if (res.code === ERR_OK) {
@@ -98,6 +101,8 @@
         setSinger: 'SET_SINGER'
       })
     },
+
+    // 5-4 注册一下
     components: {
       ListView
     }

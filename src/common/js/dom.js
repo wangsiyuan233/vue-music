@@ -1,3 +1,5 @@
+// 这里面都是很基础的 dom 操作
+
 // 4-4 外部可能也会用，所以要 export 出去
 export function hasClass(el, className) {
   //  \\s 是空白字符
@@ -17,6 +19,7 @@ export function addClass(el, className) {
   el.className = newClass.join(' ')
 }
 
+// 5-5 歌单页面获取 data 数据
 export function getData(el, name, val) {
   const prefix = 'data-'
   if (val) {
