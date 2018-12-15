@@ -28,7 +28,7 @@
         type: Boolean,
         default: true
       },
-      // 是否派发滚动事件
+      // 5-6 是否派发滚动事件
       listenScroll: {
         type: Boolean,
         default: false
@@ -71,9 +71,11 @@
           probeType: this.probeType,
           click: this.click
         })
-
+        // 5-6
         if (this.listenScroll) {
+          //  外层保留 vue 实例的 this
           let me = this
+          // pos 是位置
           this.scroll.on('scroll', (pos) => {
             me.$emit('scroll', pos)
           })

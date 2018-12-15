@@ -2,6 +2,7 @@
 <!-- 5-4 template 里面只能有一个根元素 -->
 <template>
   <!--5-4 :data="data"  data 发生变化时，重新计算 scroll, 正确滚动  -->
+  <!-- 5-6 listenScroll 在 create 里面 -->
   <scroll @scroll="scroll"
           :listen-scroll="listenScroll"
           :probe-type="probeType"
@@ -92,6 +93,7 @@
     // 5-5 需要在几个函数之间共享
     created() {
       this.probeType = 3
+      // 5-6 dom 的第一行
       this.listenScroll = true
       this.touch = {}
       this.listHeight = []
